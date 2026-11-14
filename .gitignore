@@ -1,0 +1,21 @@
+# secrets
+.env
+secrets.h
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+# firmware
+.pio/
+firmware/**/.pio/
+# dashboard
+node_modules/
+dist/
+# data and models
+*.pt
+*.onnx
+*.mp4
+recordings/
+.DS_Store
