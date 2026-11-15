@@ -1,0 +1,17 @@
+:root { color-scheme: dark; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; height: 100%; background: #101418; color: #e8edf2; font-family: system-ui, sans-serif; }
+body { overflow: hidden; overscroll-behavior: none; touch-action: none; user-select: none; }
+.page { height: 100dvh; display: flex; flex-direction: column; padding: 12px; gap: 12px; }
+.status { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { padding: 8px 12px; border-radius: 999px; background: #1d252d; font-size: 15px; }
+.ok { background: #14532d; } .warn { background: #854d0e; } .bad { background: #7f1d1d; }
+.controls { flex: 1; display: flex; flex-direction: column; justify-content: space-around; align-items: center; gap: 12px; }
+.stick { width: min(60vw, 260px); aspect-ratio: 1; border-radius: 50%; background: #1d252d; border: 2px solid #34414d; position: relative; touch-action: none; }
+.knob { position: absolute; width: 38%; aspect-ratio: 1; border-radius: 50%; background: #5aa9ff; left: 31%; top: 31%; }
+.bar { width: min(90vw, 360px); height: 72px; border-radius: 36px; background: #1d252d; border: 2px solid #34414d; position: relative; touch-action: none; }
+.bar .knob { width: 56px; height: 56px; top: 6px; left: calc(50% - 28px); aspect-ratio: auto; }
+.row { display: flex; gap: 12px; width: 100%; max-width: 420px; }
+button { flex: 1; min-height: 64px; font-size: 20px; border-radius: 14px; border: 0; color: #fff; background: #34414d; }
+button.stop { background: #b91c1c; font-weight: 700; }
+button.on { background: #15803d; }
