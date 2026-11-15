@@ -20,6 +20,10 @@ Single source of truth for pins, constants and kinematics. If hardware changes, 
 
 Starting direction signs: FL +1, FR -1, RL +1, RR -1 (right side is mirrored). Adjust by test, never by rewiring.
 
+The motor table lives in `firmware/src/config.h` (`MOTORS`, index 0..3 = FL, FR, RL, RR). That file is the only place for these channels and signs.
+
+**Current wiring state (bring-up):** only the rear motors are wired, to one L298N: ch6 to ENA, ch7 to IN1, ch8 to IN2 (RL), ch9 to ENB, ch10 to IN3, ch11 to IN4 (RR). The channel numbers were read from the board layout, not from printed labels, so they may need a fix in `config.h` after the first motor test. The front motors (0 and 1 in the bring-up sketch) are not wired yet.
+
 ## Power
 
 2S2P pack: four genuine 18650 3000 mAh cells, two 2-slot holders each wired in series, joined in parallel through a 2S 20A balancing BMS. Cells must be charged and matched within about 0.05 V before paralleling. Chain: BMS P+ then 7.5 A blade fuse then rocker switch (then latching E-stop later) then the +VBAT rail. All grounds meet at BMS P- (star ground). Typical draw about 1.65 A, peak about 5.5 A. Battery voltage is read on G36 through a 100k / 33k divider.
@@ -35,6 +39,15 @@ Starting direction signs: FL +1, FR -1, RL +1, RR -1 (right side is mirrored). A
 | WATCHDOG_MS | 300 | Stop if no valid command in this time |
 | Motion loop | 200 Hz | Own task on core 1 |
 | PWM | 1 kHz via `pca.setPWMFreq(1000)` | Tune if motors whine |
+| PCA_ADDR | 0x40 | PCA9685 I2C address |
+| I2C | G32 SDA, G33 SCL, 400 kHz | Grove port |
+| PIN_POWER_HOLD | G4, held HIGH | Keeps the stick powered (set first in `setup()`) |
+| SPEED_CAP | 0.40 | Bring-up cap: command is clamped to [-1, 1], then limited to 40 percent, then mapped through the deadband: duty = D0 + (1 - D0) * abs(speed), so full command gives duty 0.55 (2252 of 4095) |
+| TEST_SPEED | 0.40 | Speed used by the bring-up `f` and `r` keys (must not exceed SPEED_CAP) |
+| TEST_MS | 1000 | Every bring-up run auto-stops after this many ms |
+| Serial | 115200 baud | Bring-up keys: `s` scan, `0`-`3` select motor, `f`/`r` run, `x` stop, `?` help |
+
+The bring-up firmware reads `D0`, `PCA_ADDR`, `I2C`, `PIN_POWER_HOLD`, `SPEED_CAP`, `TEST_SPEED`, `TEST_MS`, the PWM frequency and the motor table from `firmware/src/config.h`. `R`, `LXY`, `WMAX`, `WATCHDOG_MS` and the motion loop belong to the later drive firmware and are not in that file yet.
 
 ## Mecanum inverse kinematics
 
