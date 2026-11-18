@@ -7,6 +7,7 @@
 #include "command.h"
 #include "kinematics.h"
 #include "motion.h"
+#include "tt_config.h"
 
 using namespace tt;
 
@@ -368,6 +369,19 @@ void test_motion_battery_limited_caps_speed() {
   TEST_ASSERT_TRUE(effectiveSpeedLimit(BatteryState::Limited) <= effectiveSpeedLimit(BatteryState::Ok));
 }
 
+// ---------------- motor wiring (docs/hardware.md, tested on robot) ----------------
+void test_config_motor_map_matches_robot() {
+  const uint8_t expect[4][3] = {{0, 1, 2}, {5, 3, 4}, {6, 7, 8}, {11, 9, 12}};
+  const int8_t signs[4] = {+1, -1, +1, -1};
+  for (int i = 0; i < 4; i++) {
+    TEST_ASSERT_EQUAL_UINT8(expect[i][0], cfg::MOTORS[i].pwmCh);
+    TEST_ASSERT_EQUAL_UINT8(expect[i][1], cfg::MOTORS[i].in1Ch);
+    TEST_ASSERT_EQUAL_UINT8(expect[i][2], cfg::MOTORS[i].in2Ch);
+    TEST_ASSERT_EQUAL_INT8(signs[i], cfg::MOTORS[i].sign);
+    TEST_ASSERT_NOT_EQUAL(10, cfg::MOTORS[i].in2Ch);  // ch10 signal path is dead
+  }
+}
+
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_clamp_unit);
@@ -404,5 +418,6 @@ int main() {
   RUN_TEST(test_motion_acceleration_limited);
   RUN_TEST(test_motion_heading_hold_corrects);
   RUN_TEST(test_motion_battery_limited_caps_speed);
+  RUN_TEST(test_config_motor_map_matches_robot);
   return UNITY_END();
 }

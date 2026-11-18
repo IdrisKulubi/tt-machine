@@ -11,14 +11,18 @@ Single source of truth for pins, constants and kinematics. If hardware changes, 
 
 ## PCA9685 channel map
 
+"Straight plug" wiring: each L298N's 6-pin header (ENA, IN1, IN2, IN3, IN4, ENB in that order) goes to six neighbouring PCA9685 signal pins in the same order, ENA on the lowest channel. Front L298N on ch 0-5, rear on ch 6-11. Exception: rear IN4 uses ch 12 via a single jumper because the ch 10 signal path gave no output in bring-up; ch 10 is unused.
+
 | Motor | Driver | Channels (PWM, IN-a, IN-b) |
 |---|---|---|
-| FL | L298N #1, A side | 0, 1, 2 |
-| FR | L298N #1, B side | 3, 4, 5 |
-| RL | L298N #2, A side | 6, 7, 8 |
-| RR | L298N #2, B side | 9, 10, 11 |
+| FL | L298N #1, A side (OUT1/OUT2) | 0, 1, 2 |
+| FR | L298N #1, B side (OUT3/OUT4) | 5, 3, 4 |
+| RL | L298N #2, A side (OUT1/OUT2) | 6, 7, 8 |
+| RR | L298N #2, B side (OUT3/OUT4) | 11, 9, 12 |
 
-Starting direction signs: FL +1, FR -1, RL +1, RR -1 (right side is mirrored). Adjust by test, never by rewiring.
+Direction signs: FL +1, FR -1, RL +1, RR -1 (right side is mirrored). **Confirmed on the robot (2026-11-18)** with the bring-up firmware: all four motors run forward and reverse, and forward on each wheel pushes the robot forward. Adjust by test, never by rewiring.
+
+The two L298N boards share power 12V to 12V and GND to GND; L298N GND is also tied to PCA9685 GND (common ground).
 
 ## Power
 

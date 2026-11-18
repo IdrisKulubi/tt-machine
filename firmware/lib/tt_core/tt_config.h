@@ -16,15 +16,18 @@ constexpr float MIN_DRIVE_FRACTION = 0.02f;  // below this wheel fraction the mo
 
 // ---- Motor wiring: PCA9685 channels and direction signs ---------------------
 // Order everywhere: FL, FR, RL, RR. Change signs here, never by rewiring.
+// "Straight plug" wiring (tested on the robot 2026-11-18): each L298N header
+// ENA IN1 IN2 IN3 IN4 ENB goes to 6 neighbouring channels, front 0..5, rear 6..11,
+// except rear IN4 is on ch12 (ch10 signal path is dead). Signs confirmed by test.
 struct MotorCfg {
   uint8_t pwmCh, in1Ch, in2Ch;
   int8_t sign;
 };
 constexpr MotorCfg MOTORS[4] = {
     {0, 1, 2, +1},    // FL
-    {3, 4, 5, -1},    // FR
+    {5, 3, 4, -1},    // FR
     {6, 7, 8, +1},    // RL
-    {9, 10, 11, -1},  // RR
+    {11, 9, 12, -1},  // RR (IN4 on ch12, ch10 unused)
 };
 constexpr uint8_t PCA_ADDR = 0x40;
 constexpr uint16_t PCA_PWM_HZ = 1000;
