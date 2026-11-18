@@ -22,6 +22,12 @@ inline float batteryVoltsFromMilliVolts(float adcMilliVolts) {
   return adcMilliVolts / 1000.0f * cfg::VBAT_DIVIDER * cfg::VBAT_CAL;
 }
 
+// State the motion code uses. Without the divider fitted the reading is noise,
+// so report Limited (drive allowed, visibly flagged) instead of the measurement.
+inline BatteryState batteryGate(BatteryState measured, bool senseFitted) {
+  return senseFitted ? measured : BatteryState::Limited;
+}
+
 class BatteryMonitor {
  public:
   // Add one raw sample (volts). Returns the state after this sample.

@@ -107,7 +107,7 @@ static void motionTask(void*) {
     portEXIT_CRITICAL(&mux);
     in.nowMs = millis();  // read AFTER the command so a fresh command is never "in the past"
     in.estop = (digitalRead(cfg::ESTOP_PIN) == LOW);
-    in.batt = battery.state();
+    in.batt = batteryGate(battery.state(), cfg::BATT_SENSE_FITTED);
     in.yawRad = yaw;
 
     MotionOutput out = motion.step(in, dt);

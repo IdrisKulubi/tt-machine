@@ -382,6 +382,15 @@ void test_config_motor_map_matches_robot() {
   }
 }
 
+void test_battery_gate() {
+  // Fitted: the measured state passes through unchanged (low still refuses).
+  TEST_ASSERT_EQUAL(BatteryState::Stop, batteryGate(BatteryState::Stop, true));
+  TEST_ASSERT_EQUAL(BatteryState::Ok, batteryGate(BatteryState::Ok, true));
+  // Not fitted: never Ok (stays visibly flagged), never trusts the noise.
+  TEST_ASSERT_EQUAL(BatteryState::Limited, batteryGate(BatteryState::Stop, false));
+  TEST_ASSERT_EQUAL(BatteryState::Limited, batteryGate(BatteryState::Ok, false));
+}
+
 int main() {
   UNITY_BEGIN();
   RUN_TEST(test_clamp_unit);
@@ -419,5 +428,6 @@ int main() {
   RUN_TEST(test_motion_heading_hold_corrects);
   RUN_TEST(test_motion_battery_limited_caps_speed);
   RUN_TEST(test_config_motor_map_matches_robot);
+  RUN_TEST(test_battery_gate);
   return UNITY_END();
 }

@@ -28,6 +28,8 @@ The two L298N boards share power 12V to 12V and GND to GND; L298N GND is also ti
 
 2S2P pack: four genuine 18650 3000 mAh cells, two 2-slot holders each wired in series, joined in parallel through a 2S 20A balancing BMS. Cells must be charged and matched within about 0.05 V before paralleling. Chain: BMS P+ then 7.5 A blade fuse then rocker switch (then latching E-stop later) then the +VBAT rail. All grounds meet at BMS P- (star ground). Typical draw about 1.65 A, peak about 5.5 A. Battery voltage is read on G36 through a 100k / 33k divider.
 
+**Not fitted yet (2026-11-18):** the G36 divider is not wired. `BATT_SENSE_FITTED = false` in `tt_config.h` makes the firmware report the battery as `limited` instead of measuring it, so there is NO low-battery stop and the USB-only refusal does not work. Only the BMS cutoff protects the cells. Wheels-up bench testing only until the divider is fitted, checked (1.8 to 2.1 V on G36 with a full pack) and the flag set back to true.
+
 ## Constants (firmware config)
 
 All live in `firmware/lib/tt_core/tt_config.h`. Wi-Fi credentials and the hub address live only in `firmware/include/secrets.h` (git-ignored; copy `secrets.example.h`).

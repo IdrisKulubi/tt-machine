@@ -67,6 +67,13 @@ constexpr uint32_t BATT_WINDOW = 50;          // 50 samples = 1 s average
 constexpr float VBAT_DIVIDER = (100.0f + 33.0f) / 33.0f;  // 100k / 33k
 constexpr float VBAT_CAL = 1.000f;  // calibrate ONCE against a multimeter
 constexpr uint8_t VBAT_ADC_PIN = 36;
+// BENCH-ONLY, TEMPORARY (owner approved 2026-11-18): the 100k/33k divider on G36
+// is not fitted yet, so the reading is meaningless. While false, the battery is
+// treated as "limited" instead of measured: NO low-battery stop, only the BMS
+// cutoff protects the cells. Wheels-up testing only. Set true once the divider
+// is fitted and checked (about 1.8-2.1 V on G36), then remove this note.
+constexpr bool BATT_SENSE_FITTED = false;
+static_assert(BATT_SENSE_FITTED || !FULL_SPEED_ENABLED, "no full speed without battery sensing");
 constexpr uint8_t ESTOP_PIN = 26;   // INPUT_PULLUP, contact closes to GND when pressed
 
 // ---- Grove I2C ---------------------------------------------------------------
